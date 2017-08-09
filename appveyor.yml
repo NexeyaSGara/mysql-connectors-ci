@@ -93,7 +93,7 @@ init:
   #- ps: iex ((new-object net.webclient).DownloadString('https://raw.githubusercontent.com/appveyor/ci/master/scripts/enable-rdp.ps1'))
  #mysql client
   - cd %APPVEYOR_BUILD_FOLDER%
-  - wget https://dev.mysql.com/get/Downloads/Connector-C/mysql-connector-c-6.1.6-src.zip
+  - appveyor DownloadFile "https://dev.mysql.com/get/Downloads/Connector-C/mysql-connector-c-6.1.6-src.zip"
   - cd mysql-connector-c-6.1.6-src && mkdir build-Release && cd build-Release
   
 install:
