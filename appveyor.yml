@@ -115,6 +115,7 @@ install:
   - cmd: echo "Generator='%CMAKE_GENERATOR%'"
   - cmd: echo "Platform='%Platform%'"
   - cmd: set PYTHONPATH=%PYTHONPATH%
+  - cmd: set BOOST_ROOT=C:\Libraries\boost_1_63_0
   - cmd: cd C:\projects\mysql-connector-c-1.1.9-src\mysql-connector-c++-1.1.9\win
   - cmake .. -G "%CMAKE_GENERATOR%" -DCMAKE_CXX_FLAGS_RELEASE="/MT /O2 /D NDEBUG" -DCMAKE_CXX_FLAGS_DEBUG="/D_DEBUG /MTd /Od /Zi" -DCMAKE_INSTALL_PREFIX=%APPVEYOR_BUILD_FOLDER%\mysql-connector-c-6.1.6-src\Release
 
