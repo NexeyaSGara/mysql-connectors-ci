@@ -96,6 +96,7 @@ init:
   - cmd: md mysql-connector-c-1.1.9-src
   - appveyor DownloadFile "https://dev.mysql.com/get/Downloads/Connector-C++/mysql-connector-c++-1.1.9.zip"
   - cmd: 7z -y x mysql-connector-c++-1.1.9.zip -oC:\projects\mysql-connector-c-1.1.9-src
+  - cmd: cd "C:\projects\mysql-connectors-ci"
   
 install:
   #- cmd: if %ARCH%==x64-msvc9 xcopy C:\projects\zmq-windows-ci\patch "C:\Program Files (x86)\Microsoft Visual Studio 9.0\VC\include"
