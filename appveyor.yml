@@ -92,9 +92,10 @@ init:
   #RDP from start
   #- ps: iex ((new-object net.webclient).DownloadString('https://raw.githubusercontent.com/appveyor/ci/master/scripts/enable-rdp.ps1'))
  #mysql client
-  - cd %APPVEYOR_BUILD_FOLDER%
-  - appveyor DownloadFile "https://dev.mysql.com/get/Downloads/Connector-C/mysql-connector-c-6.1.6-src.zip"
-  - cd mysql-connector-c-6.1.6-src && mkdir build-Release && cd build-Release
+  - cmd: cd C:\projects\
+  - cmd: md mysql-connector-c-1.1.9-src
+  - appveyor DownloadFile "https://dev.mysql.com/get/Downloads/Connector-C++/mysql-connector-c++-1.1.9.zip"
+  - cmd: 7z -y x mysql-connector-c++-1.1.9.zip -oC:\projects\mysql-connector-c-1.1.9-src
   
 install:
   #- cmd: if %ARCH%==x64-msvc9 xcopy C:\projects\zmq-windows-ci\patch "C:\Program Files (x86)\Microsoft Visual Studio 9.0\VC\include"
@@ -113,13 +114,12 @@ install:
   - cmd: echo "Generator='%CMAKE_GENERATOR%'"
   - cmd: echo "Platform='%Platform%'"
   - cmd: set PYTHONPATH=%PYTHONPATH%
-  - cmd: cd  %APPVEYOR_BUILD_FOLDER%/build-Release
+  - cmd: cd C:\projects\mysql-connector-c-1.1.9-src\win
   - cmake .. -G %CMAKE_GENERATOR%' -DCMAKE_CXX_FLAGS_RELEASE="/MT /O2 /D NDEBUG" -DCMAKE_CXX_FLAGS_DEBUG="/D_DEBUG /MTd /Od /Zi" -DCMAKE_INSTALL_PREFIX=%APPVEYOR_BUILD_FOLDER%\mysql-connector-c-6.1.6-src\Release
 
 build_script:
-  - cmake --build ./ --target install --config Debug
   - cmd: if %ARCH%==x64-msvc10 call "C:\Program Files\Microsoft SDKs\Windows\v7.1\Bin\SetEnv.cmd" /x64 Release
-  - cmd: cd  %APPVEYOR_BUILD_FOLDER%/build-Release
+  - cmd: cd C:\projects\mysql-connector-c-1.1.9-src\win
   - cmd: if %ARCH%==win32-msvc9 msbuild /P:Configuration=Release INSTALL.vcproj
   - cmd: if %ARCH%==win32-msvc10 call msbuild /P:Configuration=Release INSTALL.vcproj
   - cmd: if %ARCH%==x64-msvc10 call msbuild /P:Configuration=Release INSTALL.vcxproj
@@ -129,15 +129,15 @@ build_script:
   - cmd: if %ARCH%==x64-msvc14 msbuild /P:Configuration=Release INSTALL.vcxproj
 after_build:
   - cmd: cd "C:\projects\"
-  - cmd: 7z a mysql-connectors-4.1.6_%ARCH%.zip %APPVEYOR_BUILD_FOLDER%/build-Release\bin\
-  - cmd: 7z a mysql-connectors-4.1.6_%ARCH%.zip %APPVEYOR_BUILD_FOLDER%/build-Release\include\
-  - cmd: 7z a mysql-connectors-4.1.6_%ARCH%.zip %APPVEYOR_BUILD_FOLDER%/build-Release\lib\
-  - cmd: copy mysql-connectors-4.1.6_%ARCH%.zip C:\projects\mysql-connectors-ci\
+  - cmd: 7z a mysql-connectors-1.1.9_%ARCH%.zip %APPVEYOR_BUILD_FOLDER%/bin
+  - cmd: 7z a mysql-connectors-1.1.9_%ARCH%.zip %APPVEYOR_BUILD_FOLDER%/include
+  - cmd: 7z a mysql-connectors-1.1.9_%ARCH%.zip %APPVEYOR_BUILD_FOLDER%/lib
+  - cmd: copy mysql-connectors-1.1.9_%ARCH%.zip C:\projects\mysql-connectors-ci\
 
 on_finish:
   #RDP for finish
   #- ps: $blockRdp = $true; iex ((new-object net.webclient).DownloadString('https://raw.githubusercontent.com/appveyor/ci/master/scripts/enable-rdp.ps1'))
 
 artifacts:
-  - path: .\mysql-connectors-4.1.6_*.zip
+  - path: .\mysql-connectors-1.1.9_*.zip
  
